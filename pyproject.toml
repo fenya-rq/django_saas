@@ -1,0 +1,20 @@
+[project]
+name = "django-saas-contacts"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Yaroslav Panasenko",email = "fenyochek@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django (==5.1.11)"
+]
+
+[tool.poetry]
+packages = [{include = "django_saas_contacts", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
