@@ -6,7 +6,7 @@
 **/*.pyc.*
 
 # Virtual environments
-**/.env/
+.env/
 **/venv/
 **/ENV/
 **/env/
@@ -64,8 +64,8 @@ docker-compose.yml
 .dockerignore
 
 # Environment variables and secrets
-**/.env
-**/.env.*
+.env
+.env.example
 
 # Node / Frontend artifacts if using React/Vue within Django project
 **/node_modules/
