@@ -20,6 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False),
     SECRET_KEY=(str, None),
+    DJANGO_SUPERUSER_USERNAME=(str, 'admin'),
+    DJANGO_SUPERUSER_EMAIL=(str, 'admin@example.com'),
+    DJANGO_SUPERUSER_PASSWORD=(str, 'root'),
 )
 
 environ.Env.read_env(BASE_DIR / './core/.env')
@@ -28,6 +31,10 @@ environ.Env.read_env(BASE_DIR / './core/.env')
 SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env('DEBUG')
+
+DJANGO_SUPERUSER_USERNAME = env('DJANGO_SUPERUSER_USERNAME')
+DJANGO_SUPERUSER_EMAIL = env('DJANGO_SUPERUSER_EMAIL')
+DJANGO_SUPERUSER_PASSWORD = env('DJANGO_SUPERUSER_PASSWORD')
 
 ALLOWED_HOSTS = []
 
@@ -38,17 +45,21 @@ SHARED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_tenants',
+    # 'django_tenants',
 ]
 
 # Tenant-specific apps
-TENANT_APPS = [...]
+TENANT_APPS = []
+
+# TENANT_MODEL = 'customers.Client'
+#
+# TENANT_DOMAIN_MODEL = 'customers.Domain'
 
 # Application definition
 INSTALLED_APPS = SHARED_APPS + TENANT_APPS
 
 MIDDLEWARE = [
-    'django_tenants.middleware.main.TenantMainMiddleware',
+    # 'django_tenants.middleware.main.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -89,9 +100,9 @@ DATABASES = {
     }
 }
 
-DATABASE_ROUTERS = (
-    'django_tenants.routers.TenantSyncRouter',
-)
+# DATABASE_ROUTERS = (
+#     'django_tenants.routers.TenantSyncRouter',
+# )
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
