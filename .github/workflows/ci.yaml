@@ -1,0 +1,77 @@
+name: Django core app
+
+on:
+  pull_request:
+    branches: [ dev, staging ]
+  push:
+    branches: [ dev ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    env:
+      TEST_DB_NAME: test_db
+      TEST_DB_USER: test_user
+      TEST_DB_PASSWORD: test_password
+      TEST_DB_HOST: postgres
+      TEST_DB_PORT: 5432
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: ${{ env.TEST_DB_NAME }}
+          POSTGRES_USER: ${{ env.TEST_DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.TEST_DB_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 3
+
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13.5'
+
+    - name: Install Poetry
+      run: |
+        pip install poetry
+
+    - name: Configure Poetry for in-project virtualenv
+      run: poetry config virtualenvs.in-project true
+
+    - name: Cache Poetry virtualenv
+      uses: actions/cache@v4
+      with:
+        path: ./.venv
+        key: ${{ runner.os }}-poetry-py-3.13.5-${{ hashFiles('poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-py-3.13.5-
+          ${{ runner.os }}-poetry-py-
+          ${{ runner.os }}-poetry-
+
+    - name: Install dependencies
+      run: |
+        poetry install --no-interaction --no-root
+
+    - name: Set up Django test database environment variables
+      run: |
+        echo "DATABASE_URL=postgres://${{ env.TEST_DB_USER }}:${{ env.TEST_DB_PASSWORD }}@ \
+        ${{ env.TEST_DB_HOST }}:${{ env.TEST_DB_PORT }}/${{ env.TEST_DB_NAME }}" >> $GITHUB_ENV
+
+    - name: Run Django migrations (if necessary for tests)
+      run: |
+        poetry run python src/manage.py migrate
+
+    - name: Run tests
+      run: |
+        poetry run pytest
