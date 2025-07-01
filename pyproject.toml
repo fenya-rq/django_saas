@@ -20,10 +20,21 @@ dependencies = [
 [tool.poetry]
 packages = [{include = "django_saas_contacts", from = "src"}]
 
-
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
 ruff = "^0.12.1"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+    "src/tests"
+]
+python_files = [
+    "test_*.py",
+    "*_test.py",
+    "*_tests.py",
+]
+norecursedirs = [".git", ".tox", ".nox", ".venv", ".env", "build", "dist"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
