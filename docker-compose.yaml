@@ -8,9 +8,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - type: bind
-        source: ./infra/postgresql/data
-        target: /var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
@@ -25,12 +23,8 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - type: bind
-        source: ./infra/nginx/default.conf
-        target: /etc/nginx/conf.d/default.conf
-      - type: volume
-        source: static
-        target: /static
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - static:/static
     networks:
       - app_net
     depends_on:
@@ -44,9 +38,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - type: volume
-        source: static
-        target: /usr/src/app/static
+      - static:/usr/src/app/static
     networks:
       - app_net
     depends_on:
@@ -59,6 +51,7 @@ services:
 
 volumes:
   static:
+  postgres_data:
 networks:
   app_net:
     driver: bridge
