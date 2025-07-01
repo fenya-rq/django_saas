@@ -7,7 +7,6 @@ django_saas/
 │ │ ├── .env
 │ │ ├── .env.example
 │ │ └── settings.py
-│ ├── .dockerignore
 │ ├── Dockerfile
 │ ├── entrypoint.sh
 │ └── manage.py
