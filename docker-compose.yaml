@@ -35,6 +35,12 @@ services:
     build:
       context: .
       dockerfile: src/Dockerfile
+    environment:
+      PGUSER: ${PGUSER}
+      PGDATABASE: ${PGDATABASE}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PG_HOST: ${PG_HOST}
+      PG_PORT: ${PG_PORT}
     volumes:
       - ./src:/usr/src/app
       - static:/usr/src/app/static
