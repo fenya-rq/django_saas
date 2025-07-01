@@ -6,14 +6,24 @@ authors = [
     {name = "Yaroslav Panasenko",email = "fenyochek@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12, <4"
 dependencies = [
-    "django (==5.1.11)"
+    "django (==5.1.11)",
+    "django-ninja (==1.4.3)",
+    "psycopg2-binary (==2.9.10)",
+    "django-tenants (==3.8.0)",
+    "django-environ (==0.12.0)",
+    "gunicorn (==23.0.0)",
+    "uvicorn (==0.35.0)"
 ]
 
 [tool.poetry]
 packages = [{include = "django_saas_contacts", from = "src"}]
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+ruff = "^0.12.1"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
