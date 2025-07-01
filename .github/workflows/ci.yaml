@@ -11,19 +11,19 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     env:
-      TEST_DB_NAME: test_db
-      TEST_DB_USER: test_user
-      TEST_DB_PASSWORD: test_password
-      TEST_DB_HOST: postgres
-      TEST_DB_PORT: 5432
+      PGDATABASE: test_db
+      PGUSER: test_user
+      POSTGRES_PASSWORD: test_password
+      PG_HOST: localhost
+      PG_PORT: 5432
 
     services:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_DB: ${{ env.TEST_DB_NAME }}
-          POSTGRES_USER: ${{ env.TEST_DB_USER }}
-          POSTGRES_PASSWORD: ${{ env.TEST_DB_PASSWORD }}
+          POSTGRES_DB: ${{ env.PGDATABASE }}
+          POSTGRES_USER: ${{ env.PGUSER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
@@ -65,10 +65,9 @@ jobs:
 
     - name: Set up Django test database environment variables
       run: |
-        echo "DATABASE_URL=postgres://${{ env.TEST_DB_USER }}:${{ env.TEST_DB_PASSWORD }}@ \
-        ${{ env.TEST_DB_HOST }}:${{ env.TEST_DB_PORT }}/${{ env.TEST_DB_NAME }}" >> $GITHUB_ENV
+        echo "DATABASE_URL=postgres://${{ env.PGUSER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.PG_HOST }}:${{ env.PG_PORT }}/${{ env.PGDATABASE }}" >> $GITHUB_ENV
 
-    - name: Run Django migrations (if necessary for tests)
+    - name: Run Django migrations
       run: |
         poetry run python src/manage.py migrate
 
