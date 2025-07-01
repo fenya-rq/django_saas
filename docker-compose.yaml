@@ -12,7 +12,7 @@ services:
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
-      timeout: 5s
+      timeout: 3s
       retries: 5
     restart: on-failure:3
     networks:
@@ -35,19 +35,18 @@ services:
     build:
       context: .
       dockerfile: src/Dockerfile
-    ports:
-      - "8000:8000"
     volumes:
+      - ./src:/usr/src/app
       - static:/usr/src/app/static
     networks:
       - app_net
     depends_on:
       - db
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD", "curl", "-f", "http://localhost:8000/admin/"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
 
 volumes:
   static:
