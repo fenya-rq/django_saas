@@ -1,0 +1,75 @@
+name: LinkedIn Bot CI
+
+on:
+  pull_request:
+    branches: [ dev, staging ]
+  push:
+    branches: [ dev ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    services:
+      postgres: # Service name, will be available as 'postgres' hostname in the runner
+        image: postgres:16-alpine # Use a lightweight, specific version of postgres
+        env:
+          POSTGRES_DB: test_db # Or your desired test database name
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432 # Map port if needed, but usually not for internal service communication
+        options: >- # Health check to ensure DB is ready
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 3
+
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13.5'
+
+    - name: Install Poetry
+      run: |
+        pip install poetry
+
+    - name: Cache Poetry virtualenv
+      uses: actions/cache@v4
+      with:
+        path: ./.venv
+        key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}-py${{ matrix.python-version }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}-py
+          ${{ runner.os }}-poetry-
+
+    - name: Install dependencies
+      run: |
+        poetry install --no-interaction --no-root
+
+    - name: Set up Django test database environment variables
+      run: |
+        echo "DATABASE_URL=postgres://test_user:test_password@postgres:5432/test_db" >> $GITHUB_ENV
+        # Or individual variables as per your Django settings:
+        # echo "DB_NAME=test_db" >> $GITHUB_ENV
+        # echo "DB_USER=test_user" >> $GITHUB_ENV
+        # echo "DB_PASSWORD=test_password" >> $GITHUB_ENV
+        # echo "DB_HOST=postgres" >> $GITHUB_ENV
+        # echo "DB_PORT=5432" >> $GITHUB_ENV
+      env:
+      # You would typically have these in your .env or similar and configure Django to read them
+      # Ensure your Django settings.py reads these environment variables for DATABASES['default']
+      # For example, using dj-database-url or os.environ.get()
+
+    - name: Run Django migrations (if necessary for tests)
+      run: |
+        poetry run python src/manage.py migrate
+
+    - name: Run tests
+      run: |
+        poetry run pytest
