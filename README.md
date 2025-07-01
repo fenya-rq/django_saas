@@ -7,6 +7,8 @@ django_saas/
 │ │ ├── .env
 │ │ ├── .env.example
 │ │ └── settings.py
+│ ├── tests/
+│ │ └── contact_tests.py
 │ ├── Dockerfile
 │ ├── entrypoint.sh
 │ └── manage.py
