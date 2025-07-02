@@ -15,7 +15,7 @@ dependencies = [
     "django-environ (==0.12.0)",
     "gunicorn (==23.0.0)",
     "uvicorn (==0.35.0)",
-    "email-validator (==2.2.0)"
+    "email-validator (==2.2.0)",
 ]
 
 [tool.poetry]
@@ -24,12 +24,11 @@ packages = [{include = "django_saas_contacts", from = "src"}]
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
 ruff = "^0.12.1"
+pytest-django = "4.11.1"
 
 [tool.pytest.ini_options]
-testpaths = [
-    "tests",
-    "src/tests"
-]
+pythonpath = ["src"]
+DJANGO_SETTINGS_MODULE = "core.settings"
 python_files = [
     "test_*.py",
     "*_test.py",
