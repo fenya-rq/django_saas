@@ -1,4 +1,4 @@
-from django.http import JsonResponse, Http404
+from django.http import Http404, JsonResponse
 from django.utils.deprecation import MiddlewareMixin
 from django_tenants.utils import connection, get_public_schema_name
 

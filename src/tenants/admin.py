@@ -6,4 +6,4 @@ from .models import Tenant
 
 @admin.register(Tenant)
 class TenantAdmin(TenantAdminMixin, admin.ModelAdmin):
-        list_display = ('name', 'schema_name')
+    list_display = ('name', 'schema_name')
