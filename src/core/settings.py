@@ -54,7 +54,7 @@ SHARED_APPS = [
     'django_tenants',
     # # Created apps
     'tenants',
-    'users'
+    'users',
 ]
 
 # Tenant-specific apps
@@ -107,15 +107,11 @@ DATABASES = {
         'PASSWORD': env('POSTGRES_PASSWORD'),
         'HOST': env('PG_HOST'),
         'PORT': env('PG_PORT'),
-        'TEST': {
-            'NAME': 'test_db'
-        }
+        'TEST': {'NAME': 'test_db'},
     }
 }
 
-DATABASE_ROUTERS = (
-    'django_tenants.routers.TenantSyncRouter',
-)
+DATABASE_ROUTERS = ('django_tenants.routers.TenantSyncRouter',)
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -5,17 +5,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Tenant',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
                 ('name', models.CharField(max_length=100)),
                 ('schema_name', models.CharField(max_length=63, unique=True)),
             ],
@@ -26,10 +29,22 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Domain',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+                    ),
+                ),
                 ('domain', models.CharField(db_index=True, max_length=253, unique=True)),
                 ('is_primary', models.BooleanField(db_index=True, default=True)),
-                ('tenant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='domains', to='tenants.tenant')),
+                (
+                    'tenant',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='domains',
+                        to='tenants.tenant',
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
