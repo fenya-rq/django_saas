@@ -504,6 +504,25 @@ pygments = ">=2.7.2"
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "requests", "setuptools", "xmlschema"]
 
 [[package]]
+name = "pytest-django"
+version = "4.11.1"
+description = "A Django plugin for pytest."
+optional = false
+python-versions = ">=3.8"
+groups = ["dev"]
+files = [
+    {file = "pytest_django-4.11.1-py3-none-any.whl", hash = "sha256:1b63773f648aa3d8541000c26929c1ea63934be1cfa674c76436966d73fe6a10"},
+    {file = "pytest_django-4.11.1.tar.gz", hash = "sha256:a949141a1ee103cb0e7a20f1451d355f83f5e4a5d07bdd4dcfdd1fd0ff227991"},
+]
+
+[package.dependencies]
+pytest = ">=7.0.0"
+
+[package.extras]
+docs = ["sphinx", "sphinx_rtd_theme"]
+testing = ["Django", "django-configurations (>=2.0)"]
+
+[[package]]
 name = "ruff"
 version = "0.12.1"
 description = "An extremely fast Python linter and code formatter, written in Rust."
@@ -609,4 +628,4 @@ standard = ["colorama (>=0.4) ; sys_platform == \"win32\"", "httptools (>=0.6.3)
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12, <4"
-content-hash = "6f99d21f81e03d02262dbd6818d042ad91413a59e5180c1da8fa62e7d6f23f2b"
+content-hash = "d1ef9e076e4bd20732900f04165599a720c80451a1a67d99e66852510afd704d"
