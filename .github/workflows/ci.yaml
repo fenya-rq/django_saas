@@ -63,6 +63,18 @@ jobs:
       run: |
         poetry install --no-interaction --no-root
 
+    - name: Check code with Ruff
+      run: |
+        poetry run ruff check
+
+    - name: Check code with Bandit
+      run: |
+        poetry run bandit -c pyproject.toml -r src
+
+    - name: Format code with Ruff
+      run: |
+        poetry run ruff format
+
     - name: Set up Django test database environment variables
       run: |
         echo "DATABASE_URL=postgres://${{ env.PGUSER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.PG_HOST }}:${{ env.PG_PORT }}/${{ env.PGDATABASE }}" >> $GITHUB_ENV
