@@ -5,9 +5,9 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
 # Creating working directory
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
-COPY ../poetry.lock ../pyproject.toml ../src ./
+COPY ../poetry.lock ../pyproject.toml ../src/. ./
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
@@ -24,4 +24,4 @@ RUN poetry config virtualenvs.create false && poetry install --no-interaction --
 
 EXPOSE 8000
 
-CMD ["sh", "/usr/src/app/entrypoint.sh"]
+CMD ["sh", "/usr/app/entrypoint.sh"]

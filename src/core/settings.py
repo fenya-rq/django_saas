@@ -23,10 +23,14 @@ env = environ.Env(
     DJANGO_SUPERUSER_USERNAME=(str, 'admin'),
     DJANGO_SUPERUSER_EMAIL=(str, 'admin@example.com'),
     DJANGO_SUPERUSER_PASSWORD=(str, 'root'),
+    PGUSER=(str, None),
+    PGDATABASE=(str, None),
+    POSTGRES_PASSWORD=(str, None),
+    PG_HOST=(str, 'localhost'),
+    PG_PORT=(int, 5432),
 )
 
 environ.Env.read_env(BASE_DIR / './core/.env')
-
 
 SECRET_KEY = env('SECRET_KEY')
 
@@ -47,21 +51,24 @@ SHARED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django_tenants',
+    'django_tenants',
+    # # Created apps
+    'tenants',
+    'users',
 ]
 
 # Tenant-specific apps
-TENANT_APPS = []
+TENANT_APPS = ['contacts']
 
-# TENANT_MODEL = 'customers.Client'
-#
-# TENANT_DOMAIN_MODEL = 'customers.Domain'
+TENANT_MODEL = 'tenants.Tenant'
+
+TENANT_DOMAIN_MODEL = 'tenants.Domain'
 
 # Application definition
-INSTALLED_APPS = SHARED_APPS + TENANT_APPS
+INSTALLED_APPS = SHARED_APPS + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 MIDDLEWARE = [
-    # 'django_tenants.middleware.main.TenantMainMiddleware',
+    'tenants.middlewares.HeaderTenantMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -92,22 +99,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django_tenants.postgresql_backend',
+        'NAME': env('PGDATABASE'),
+        'USER': env('PGUSER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': env('PG_HOST'),
+        'PORT': env('PG_PORT'),
+        'TEST': {'NAME': 'test_db'},
     }
 }
 
-# DATABASE_ROUTERS = (
-#     'django_tenants.routers.TenantSyncRouter',
-# )
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
+DATABASE_ROUTERS = ('django_tenants.routers.TenantSyncRouter',)
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -124,6 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'users.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
