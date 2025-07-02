@@ -35,15 +35,21 @@ services:
     build:
       context: .
       dockerfile: src/Dockerfile
+    environment:
+      PGUSER: ${PGUSER}
+      PGDATABASE: ${PGDATABASE}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PG_HOST: ${PG_HOST}
+      PG_PORT: ${PG_PORT}
     volumes:
-      - ./src:/usr/src/app
-      - static:/usr/src/app/static
+      - ./src:/usr/app
+      - static:/usr/app/static
     networks:
       - app_net
     depends_on:
       - db
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/admin/"]
+      test: ["CMD", "curl", "-f", "-H", "X-SCHEMA: public", "http://localhost:8000/admin/"]
       interval: 5s
       timeout: 3s
       retries: 3
