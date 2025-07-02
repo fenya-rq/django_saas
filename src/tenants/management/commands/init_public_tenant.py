@@ -1,17 +1,17 @@
 from django.core.management.base import BaseCommand
 
-from tenants.models import Tenant, Domain
+from tenants.models import Domain, Tenant
 
 
 class Command(BaseCommand):
-    help = "Initializes the public tenant and domain if they do not exist."
+    help = 'Initializes the public tenant and domain if they do not exist.'
 
     def add_arguments(self, parser):
         parser.add_argument(
             '--domain',
             type=str,
             default='localhost',
-            help='Domain name to associate with the public tenant (default: localhost).'
+            help='Domain name to associate with the public tenant (default: localhost).',
         )
 
     def handle(self, *args, **options):
@@ -36,8 +36,12 @@ class Command(BaseCommand):
         )
 
         if domain_created:
-            self.stdout.write(self.style.SUCCESS(f'✅ Domain "{domain_name}" linked to public tenant.'))
+            self.stdout.write(
+                self.style.SUCCESS(f'✅ Domain "{domain_name}" linked to public tenant.')
+            )
         else:
-            self.stdout.write(self.style.WARNING(f'ℹ️ Domain "{domain_name}" already exists for public tenant.'))
+            self.stdout.write(
+                self.style.WARNING(f'ℹ️ Domain "{domain_name}" already exists for public tenant.')
+            )
 
         self.stdout.write(self.style.SUCCESS('Public tenant initialization complete.'))
