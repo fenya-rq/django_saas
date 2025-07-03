@@ -32,6 +32,9 @@ pythonpath = ["src"]
 DJANGO_SETTINGS_MODULE = "core.settings"
 python_files = ["test_*.py", "*_test.py", "*_tests.py"]
 norecursedirs = [".git", ".tox", ".nox", ".venv", ".env", "build", "dist"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
 
 [tool.ruff]
 exclude = [".venv", ".github", "infra",  "**/migrations/"]

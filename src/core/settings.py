@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 import environ
@@ -30,7 +31,9 @@ env = environ.Env(
     PG_PORT=(int, 5432),
 )
 
-environ.Env.read_env(BASE_DIR / './core/.env')
+ENV_PATH = BASE_DIR / 'core' / os.environ.get('ENV_FILENAME', '.env')
+
+environ.Env.read_env(ENV_PATH)
 
 SECRET_KEY = env('SECRET_KEY')
 

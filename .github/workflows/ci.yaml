@@ -16,6 +16,7 @@ jobs:
       POSTGRES_PASSWORD: test_password
       PG_HOST: localhost
       PG_PORT: 5432
+      SECRET_KEY: ${{ secrets.DJANGO_TEST_SECRET_KEY }}
 
     services:
       postgres:
@@ -74,10 +75,6 @@ jobs:
     - name: Format code with Ruff
       run: |
         poetry run ruff format
-
-    - name: Set up Django test database environment variables
-      run: |
-        echo "DATABASE_URL=postgres://${{ env.PGUSER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.PG_HOST }}:${{ env.PG_PORT }}/${{ env.PGDATABASE }}" >> $GITHUB_ENV
 
     - name: Run Django migrations
       run: |
