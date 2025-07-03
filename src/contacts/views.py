@@ -1,5 +1,3 @@
-from typing import List
-
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from ninja import Router
@@ -20,12 +18,12 @@ def create_contact(request, payload: ContactIn):
         return 400, {'detail': 'Email already exists in this tenant.'}
 
 
-@router.get('/contacts', response=List[ContactOut])
+@router.get('/contacts', response=list[ContactOut])
 @paginate(PageNumberPagination)
 def list_contacts(request, email: str | None = None):
     qs = Contact.objects.all()
-    if email:
-        qs = qs.filter(email=email)
+    # if email:
+    #     qs = qs.filter(email=email)
     return qs
 
 
