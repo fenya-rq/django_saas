@@ -1,3 +1,6 @@
+import itertools
+from typing import Callable
+
 import pytest
 from django_tenants.utils import schema_context
 
@@ -5,28 +8,34 @@ from contacts.models import Contact
 from tenants.models import Domain, Tenant
 
 
-@pytest.fixture
-def setup_tenant_with_contacts() -> tuple[Tenant, Tenant, Tenant]:
+@pytest.fixture(autouse=True)
+def setup_public_tenant() -> Tenant:
+    """Automatically sets up the public tenant for tests."""
     public_tenant = Tenant.objects.create(schema_name='public', name='Public')
     Domain.objects.create(domain='localhost', tenant=public_tenant, is_primary=True)
-
-    bigco = Tenant.objects.create(schema_name='bigco', name='Big company')
-    Domain.objects.create(domain='sub1.localhost', tenant=bigco, is_primary=True)
-
-    smallco = Tenant.objects.create(schema_name='smallco', name='Small company')
-    Domain.objects.create(domain='sub2.localhost', tenant=smallco, is_primary=True)
-
-    return public_tenant, bigco, smallco
+    return public_tenant
 
 
 @pytest.fixture
-def create_contacts(setup_tenant_with_contacts) -> tuple[Contact, Contact]:
-    _, bigco, smallco = setup_tenant_with_contacts
+def create_tenant() -> Callable[[int], Tenant]:
+    """Return a factory to create tenants with a given ID."""
 
-    with schema_context(bigco.schema_name):
-        bigco_contact = Contact.objects.create(name='John Doe', email='ex@mail.com')
+    def _create_tenant(id_) -> Tenant:
+        tenant = Tenant.objects.create(schema_name=f'company_{id_}', name=f'Company {id_}')
+        Domain.objects.create(domain=f'sub{id_}.localhost', tenant=tenant, is_primary=True)
+        return tenant
 
-    with schema_context(smallco.schema_name):
-        smallco_contact = Contact.objects.create(name='Peter Pan', email='ex@mail.com')
+    return _create_tenant
 
-    return bigco_contact, smallco_contact
+
+@pytest.fixture
+def create_contact() -> Callable[[Tenant], Contact]:
+    """Return a factory to create contacts within a specified tenant schema."""
+    counter = itertools.count(1)
+
+    def _create_contact(tenant) -> Contact:
+        with schema_context(tenant.schema_name):
+            id_ = next(counter)
+            return Contact.objects.create(name=f'Contact {id_}', email=f'example{id_}@mail.com')
+
+    return _create_contact
