@@ -16,6 +16,7 @@ jobs:
       POSTGRES_PASSWORD: test_password
       PG_HOST: localhost
       PG_PORT: 5432
+      SECRET_KEY: ${{ secrets.DJANGO_TEST_SECRET_KEY }}
 
     services:
       postgres:
@@ -63,9 +64,17 @@ jobs:
       run: |
         poetry install --no-interaction --no-root
 
-    - name: Set up Django test database environment variables
+    - name: Check code with Ruff
       run: |
-        echo "DATABASE_URL=postgres://${{ env.PGUSER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.PG_HOST }}:${{ env.PG_PORT }}/${{ env.PGDATABASE }}" >> $GITHUB_ENV
+        poetry run ruff check
+
+    - name: Check code with Bandit
+      run: |
+        poetry run bandit -c pyproject.toml -r src
+
+    - name: Format code with Ruff
+      run: |
+        poetry run ruff format
 
     - name: Run Django migrations
       run: |
