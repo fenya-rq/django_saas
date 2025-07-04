@@ -23,11 +23,11 @@ def test_request_without_x_schema_header(client) -> None:
 @pytest.mark.django_db
 def test_request_wit_x_schema_header(client) -> None:
     """
-    Test GET /admin without X-SCHEMA header.
+    Test GET /admin wit X-SCHEMA header.
 
     Ensures:
-    - Returns HTTP 400 status code.
-    - Response includes 'X-SCHEMA' mention in detail message.
+    - Returns HTTP 301 status code.
+    - Response that redirect to admin log in page.
     """
     public_tenant = Tenant.objects.first()
     resp = client.get('/admin', headers={'X-SCHEMA': public_tenant.schema_name})
