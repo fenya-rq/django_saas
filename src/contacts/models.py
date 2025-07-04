@@ -9,3 +9,6 @@ class Contact(models.Model):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=11, blank=True)
     date_created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Contact: {self.name}'

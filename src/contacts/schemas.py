@@ -9,7 +9,13 @@ class ContactIn(BaseModel):
     email: EmailStr
     phone: str | None = Field(None, max_length=11)
 
+    class Config:
+        from_attributes = True
+
 
 class ContactOut(ContactIn):
     id: UUID
     date_created: date
+
+    class Config:
+        from_attributes = True
