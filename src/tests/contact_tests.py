@@ -3,20 +3,35 @@ from django.db.utils import IntegrityError
 from django_tenants.utils import connection, schema_context
 
 from contacts.models import Contact
+from tenants.models import Tenant
 
 
 @pytest.mark.django_db
 def test_request_without_x_schema_header(client) -> None:
     """
-    Test GET /contacts without X-SCHEMA header.
+    Test GET /admin without X-SCHEMA header.
 
     Ensures:
     - Returns HTTP 400 status code.
     - Response includes 'X-SCHEMA' mention in detail message.
     """
-    resp = client.get('/contacts')
+    resp = client.get('/admin')
     assert resp.status_code == 400
-    assert 'X-SCHEMA' in resp.json().get('detail', '')
+    assert resp.reason_phrase == 'Missing X-SCHEMA header.'
+
+
+@pytest.mark.django_db
+def test_request_wit_x_schema_header(client) -> None:
+    """
+    Test GET /admin without X-SCHEMA header.
+
+    Ensures:
+    - Returns HTTP 400 status code.
+    - Response includes 'X-SCHEMA' mention in detail message.
+    """
+    public_tenant = Tenant.objects.first()
+    resp = client.get('/admin', headers={'X-SCHEMA': public_tenant.schema_name})
+    assert resp.status_code == 301
 
 
 @pytest.mark.django_db
