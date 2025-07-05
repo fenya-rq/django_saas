@@ -158,5 +158,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 if DEBUG:
-    ALLOWED_HOSTS = ['*.localhost', 'localhost', '127.0.0.1']
+    ALLOWED_HOSTS = ['.localhost', 'localhost', '127.0.0.1']
+    CORS_ALLOW_ALL_ORIGINS = True
+    INSTALLED_APPS.append('corsheaders')
+    MIDDLEWARE[0] = 'django_tenants.middleware.main.TenantMainMiddleware'
     MIDDLEWARE.insert(2, 'whitenoise.middleware.WhiteNoiseMiddleware')
+    MIDDLEWARE.insert(4,     'corsheaders.middleware.CorsMiddleware')
+
