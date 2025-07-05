@@ -5,6 +5,7 @@ from ninja.pagination import PageNumberPagination, paginate
 
 from contacts.models import Contact
 from contacts.schemas import ContactIn, ContactOut
+from utilities.decorators import check_model_availability_for_tenant
 
 router = Router()
 
@@ -20,11 +21,10 @@ def create_contact(request, payload: ContactIn):
 
 @router.get('/contacts', response=list[ContactOut])
 @paginate(PageNumberPagination)
-def list_contacts(request, email: str | None = None):
-    qs = Contact.objects.all()
-    # if email:
-    #     qs = qs.filter(email=email)
-    return qs
+@check_model_availability_for_tenant
+def list_contacts(request):
+    contacts = Contact.objects.all()
+    return contacts
 
 
 @router.get('/contacts/{contact_id}', response=ContactOut)
