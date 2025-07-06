@@ -24,3 +24,18 @@ class ContactOut(ContactIn):
 
     class Config:
         from_attributes = True
+
+
+class ContactUpdate(ContactIn):
+    email: EmailStr | None = Field(None)
+    name: str | None = Field(None, max_length=100)
+
+    @field_validator('email', mode='before')
+    @classmethod
+    def set_empty_email(cls, v):
+        return v or None
+
+    @field_validator('name', mode='before')
+    @classmethod
+    def set_empty_name(cls, v):
+        return v or ''
