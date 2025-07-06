@@ -155,8 +155,3 @@ STATIC_ROOT = BASE_DIR / 'static'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-if DEBUG:
-    ALLOWED_HOSTS = ['*.localhost', 'localhost', '127.0.0.1']
-    MIDDLEWARE.insert(2, 'whitenoise.middleware.WhiteNoiseMiddleware')
