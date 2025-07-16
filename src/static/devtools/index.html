@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dev API Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Dev API Test Page</h1>
+
+    <div class="section">
+      <h2>List Contacts</h2>
+      <button onclick="apiGet()">GET /contacts</button>
+    </div>
+
+    <div class="section">
+      <h2>Create Contact (POST)</h2>
+      <form id="createForm">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="phone" placeholder="Phone (optional)">
+        <button type="submit">Create</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>Update Contact (PUT)</h2>
+      <form id="updateForm">
+        <input type="text" name="id" placeholder="Contact ID" required>
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email (optional)">
+        <input type="text" name="phone" placeholder="Phone (optional)">
+        <button type="submit">Update</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>Delete Contact (DELETE)</h2>
+      <input type="text" id="deleteId" placeholder="Contact ID">
+      <button onclick="apiDelete()">Delete</button>
+    </div>
+
+    <pre id="output">Output will appear here</pre>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
