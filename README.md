@@ -47,10 +47,27 @@
 2. Запрос без X-SCHEMA → 400.
 3. Email уникален **внутри** схемы, но может повторяться в другой.
 ___
-### <p align="center">Start instruction</p>
-Pre-requests: docker latest version
+### <p align="center">Start Instruction</p>
+**Pre-requisites:** Docker (latest version) installed.
 
-1. `git clone https://github.com/fenya-rq/django_saas.git`
-2. `cp .env.example .env; cp src/core/.env.example src/core/.env`
-3. Adjust your .env files to your credentials
-4. Run project from django_saas directory `docker compose up -d`
+---
+#### Clone and run the project locally:
+
+1. Clone the repository:
+2. Change directory:
+3. Copy example environment files:
+4. **Adjust the .env files to match your credentials.**
+5. Start the project:
+```bash
+git clone https://github.com/fenya-rq/django_saas.git
+cd django_saas
+cp .env.example .env; cp src/core/.env.example src/core/.env
+docker compose up -d
+```
+
+#### For creating tenants and their contacts:
+1. Access the app container shell:
+```bash
+docker exec -it app sh
+python3 manage.py shell
+```
