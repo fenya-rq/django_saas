@@ -10,16 +10,24 @@ function getSchemaHeader() {
 async function apiGet() {
   output.textContent = 'Loading GET...';
   try {
-        const res = await fetch(baseUrl, {
-        method: 'GET',
-        headers: getSchemaHeader()
-      });
-    const data = await res.json();
-    output.textContent = JSON.stringify(data, null, 2);
+    const res = await fetch(baseUrl, {
+      method: 'GET',
+      headers: getSchemaHeader()
+    });
+
+    if (res.status === 404) {
+      output.textContent = 'Error 404: Tenant not found';
+      return;
+    } else {
+      const data = await res.json();
+      output.textContent = JSON.stringify(data, null, 2);
+    }
+
   } catch (err) {
     output.textContent = 'GET error: ' + err;
   }
 }
+
 
 // POST (create contact)
 document.getElementById('createForm').addEventListener('submit', async function(e) {

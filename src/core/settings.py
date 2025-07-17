@@ -55,7 +55,7 @@ SHARED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_tenants',
-    # # Created apps
+    # Created apps
     'tenants',
     'users',
 ]
@@ -145,9 +145,3 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-if DEBUG:
-    CORS_ALLOWED_ORIGINS = ['http://localhost:8000']
-    INSTALLED_APPS.append('corsheaders')
-    MIDDLEWARE.insert(2, 'whitenoise.middleware.WhiteNoiseMiddleware')
-    MIDDLEWARE.insert(4, 'corsheaders.middleware.CorsMiddleware')
