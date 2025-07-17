@@ -1,17 +1,33 @@
 const output = document.getElementById('output');
 const baseUrl = `${window.location.origin}/api/v1/contacts`;
 
+function getSchemaHeader() {
+  const schema = document.getElementById('schemaInput').value.trim();
+  return { 'X-SCHEMA': schema || 'public' }; // default fallback
+}
+
 // GET contacts
 async function apiGet() {
   output.textContent = 'Loading GET...';
   try {
-    const res = await fetch(baseUrl);
-    const data = await res.json();
-    output.textContent = JSON.stringify(data, null, 2);
+    const res = await fetch(baseUrl, {
+      method: 'GET',
+      headers: getSchemaHeader()
+    });
+
+    if (res.status === 404) {
+      output.textContent = 'Error 404: Tenant not found';
+      return;
+    } else {
+      const data = await res.json();
+      output.textContent = JSON.stringify(data, null, 2);
+    }
+
   } catch (err) {
     output.textContent = 'GET error: ' + err;
   }
 }
+
 
 // POST (create contact)
 document.getElementById('createForm').addEventListener('submit', async function(e) {
@@ -30,7 +46,7 @@ document.getElementById('createForm').addEventListener('submit', async function(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-SCHEMA': 'public' // include tenant schema header if needed
+        ...getSchemaHeader()
       },
       body: JSON.stringify(payload)
     });
@@ -61,7 +77,7 @@ document.getElementById('updateForm').addEventListener('submit', async function(
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'X-SCHEMA': 'public'
+        ...getSchemaHeader()
       },
       body: JSON.stringify(payload)
     });
@@ -85,9 +101,7 @@ async function apiDelete() {
   try {
     const res = await fetch(`${baseUrl}/${contactId}`, {
       method: 'DELETE',
-      headers: {
-        'X-SCHEMA': 'public'
-      }
+      headers: getSchemaHeader()
     });
     output.textContent = res.status === 204
       ? `Contact ${contactId} deleted successfully (204).`

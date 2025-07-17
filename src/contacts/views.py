@@ -3,17 +3,18 @@ from uuid import UUID
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from ninja import Router
-from ninja.pagination import PageNumberPagination, paginate
+from ninja.pagination import paginate
 
 from contacts.models import Contact
 from contacts.schemas import ContactIn, ContactOut, ContactUpdate
 from utilities.decorators import check_model_availability_for_tenant
+from utilities.paginators import SafePagination
 
 router = Router()
 
 
 @router.get('/contacts', response=list[ContactOut])
-@paginate(PageNumberPagination)
+@paginate(SafePagination)
 @check_model_availability_for_tenant
 def list_contacts(request):
     contacts = Contact.objects.all()
