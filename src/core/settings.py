@@ -24,9 +24,9 @@ env = environ.Env(
     DJANGO_SUPERUSER_USERNAME=(str, 'admin'),
     DJANGO_SUPERUSER_EMAIL=(str, 'admin@example.com'),
     DJANGO_SUPERUSER_PASSWORD=(str, 'root'),
-    PGUSER=(str, None),
-    PGDATABASE=(str, None),
-    POSTGRES_PASSWORD=(str, None),
+    PGUSER=(str, 'postgres'),
+    PGDATABASE=(str, 'postgres'),
+    POSTGRES_PASSWORD=(str, 'pass'),
     PG_HOST=(str, 'localhost'),
     PG_PORT=(int, 5432),
 )
@@ -55,7 +55,7 @@ SHARED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_tenants',
-    # # Created apps
+    # Created apps
     'tenants',
     'users',
 ]

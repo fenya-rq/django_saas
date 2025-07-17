@@ -47,8 +47,8 @@ services:
       PG_HOST: ${PG_HOST}
       PG_PORT: ${PG_PORT}
     volumes:
-      - ./src:/usr/app
       - static:/usr/app/static
+      - ./src:/usr/app
     networks:
       - app_net
     depends_on:

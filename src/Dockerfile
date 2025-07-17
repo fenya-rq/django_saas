@@ -7,7 +7,9 @@ ENV PYTHONUNBUFFERED=1 \
 # Creating working directory
 WORKDIR /usr/app
 
-COPY ../poetry.lock ../pyproject.toml ../src/. ./
+COPY poetry.lock pyproject.toml src/. ./
+# explicitly copying dev static to add in named volume
+COPY src/static/. ./
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
