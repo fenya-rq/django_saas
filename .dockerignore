@@ -44,7 +44,7 @@
 # Django specific
 **/staticfiles/
 **/media/
-**/static/
+#**/static/
 
 # Editor / OS / Tooling files
 **/.DS_Store
